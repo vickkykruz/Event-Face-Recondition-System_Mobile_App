@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-path name="external_files" path="Android/data/com.event_face_recondition_system.event_face_recondition_system_mobile_app/files/" />
+</paths>
