@@ -6,24 +6,23 @@ import 'dart:io';
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
 import 'face_scan_screen.dart';
-import 'second_webview_screen.dart';
+import 'webview_screen.dart';
 
 
-class WebViewPage extends StatefulWidget {
+class SecondWebViewPage extends StatefulWidget {
   final String url;
-  const WebViewPage({Key? key, required this.url}) : super(key: key);
+  const SecondWebViewPage({Key? key, required this.url}) : super(key: key);
 
   @override
-  _WebViewPageState createState() => _WebViewPageState();
+  _SecondWebViewPageState createState() => _SecondWebViewPageState();
 }
 
-class _WebViewPageState extends State<WebViewPage> {
+class _SecondWebViewPageState extends State<SecondWebViewPage> {
   late WebViewController _controller;
   bool _isWebViewInitialized = false;
   String? storedFaceScanKey;
   String? storedScanType;
   String? _errorMessage;
-  final GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey<RefreshIndicatorState>();
 
 
   @override
@@ -45,9 +44,12 @@ class _WebViewPageState extends State<WebViewPage> {
           onNavigationRequest: (NavigationRequest request) {
             debugPrint("🌍 Requested URL: ${request.url}");
 
+            //final RegExp faceScanRegex = RegExp(
+            //    r"https://20b9-197-211-59-55\.ngrok-free\.app/auth/students/face-scan/([\w\d]+)");
+
             // Regex to match both face scan and attendance scan routes
             final RegExp scanRegex = RegExp(
-                  r"https://60c2-102-88-108-224\.ngrok-free\.app/(auth/students/face-scan|students/attendance-scan)/([\w\d-]+)?");
+                  r"https://60c2-102-88-108-224\.ngrok-free\.app/(auth/students/face-scan|students/attendance-scan)/([\w\d]+)?");
 
  
             final match = scanRegex.firstMatch(request.url);
@@ -248,7 +250,7 @@ class _WebViewPageState extends State<WebViewPage> {
       debugPrint("⚠️ FaceScan Key is missing, aborting API request.");
       return false;
     }
-    //const String apiUrl = "https://60c2-102-88-108-224.ngrok-free.app/auth/students/process-face-scan"; // Update with actual API
+    //const String apiUrl = "https://20b9-197-211-59-55.ngrok-free.app/auth/students/process-face-scan"; // Update with actual API
 
     
     // Determine API URL based on scan type
@@ -286,7 +288,6 @@ class _WebViewPageState extends State<WebViewPage> {
         }
 
         debugPrint("⚠️  Redirect URL: $redirectUrl");
-
         setState(() {
           _errorMessage = null; // Clear previous errors
         });
@@ -294,62 +295,61 @@ class _WebViewPageState extends State<WebViewPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => SecondWebViewPage(url: redirectUrl),
+            builder: (context) => WebViewPage(url: redirectUrl),
           ),
         );
 
         return true;
       } else {
- 
+        
         debugPrint("⚠️ API Error: ${response.statusCode}, ${response.body}");
-
         setState(() {
           _errorMessage = "Error: ${response.statusCode} - ${response.body}";
         });
 
         // Show retry option
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text("Verification Failed"),
-            content: Text("Face verification failed. Would you like to try again?"),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Close the dialog
+showDialog(
+  context: context,
+  builder: (context) => AlertDialog(
+    title: Text("Verification Failed"),
+    content: Text("Face verification failed. Would you like to try again?"),
+    actions: [
+      TextButton(
+        onPressed: () {
+          Navigator.pop(context); // Close the dialog
 
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                    builder: (context) => FaceScanScreen(
-                      faceScanKey: faceScanKey,
-                      onScanComplete: (File scanResult) async {
-                        debugPrint("🔄 Face Scan Completed: ${scanResult.path}");
-                        bool success = await _sendScanResult(scanResult, faceScanKey, scanType);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FaceScanScreen(
+                faceScanKey: faceScanKey,
+                onScanComplete: (File scanResult) async {
+                  debugPrint("🔄 Face Scan Completed: ${scanResult.path}");
+                  bool success = await _sendScanResult(scanResult, faceScanKey, scanType);
 
-                        if (success) {
-                          debugPrint("✅ Face scan successful. Reloading WebView...");
-                          _controller.runJavaScript("window.onFaceScanComplete('${scanResult.path}');");
-                          _controller.loadRequest(Uri.parse(widget.url)); // Reload WebView
-                        } else {
-                          debugPrint("❌ Face scan failed. API request was unsuccessful.");
-                        }
-                      },
-                    ),
-                  ),
-                ).then((_) {
-                  debugPrint("🔙 Returned from FaceScanScreen");
-                });
-              },
-              child: Text("Retry"),
+                  if (success) {
+                    debugPrint("✅ Face scan successful. Reloading WebView...");
+                    _controller.runJavaScript("window.onFaceScanComplete('${scanResult.path}');");
+                    _controller.loadRequest(Uri.parse(widget.url)); // Reload WebView
+                  } else {
+                    debugPrint("❌ Face scan failed. API request was unsuccessful.");
+                  }
+                },
+              ),
             ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("Cancel"),
-            ),
-          ],
-        ),
-      );
+          ).then((_) {
+            debugPrint("🔙 Returned from FaceScanScreen");
+          });
+        },
+        child: Text("Retry"),
+      ),
+      TextButton(
+        onPressed: () => Navigator.pop(context),
+        child: Text("Cancel"),
+      ),
+    ],
+  ),
+);
 
         return false;
       }
@@ -377,20 +377,10 @@ class _WebViewPageState extends State<WebViewPage> {
       onWillPop: _handleBackPress,
       child: Scaffold(
         body: Stack(
-          alignment: Alignment.center,
           children: [
-            if (_errorMessage != null) // ✅ Show error message if present
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                _errorMessage!,
-                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-              ),
-            ),
             SafeArea(
               child: _isWebViewInitialized
                   ? RefreshIndicator(
-                    key: _refreshKey,
                     onRefresh: _reloadWebView,
                     child: NotificationListener<ScrollUpdateNotification>(
                       onNotification: (scrollNotification) {

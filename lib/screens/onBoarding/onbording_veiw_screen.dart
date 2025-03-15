@@ -36,7 +36,7 @@ class _OnboardingViewState extends State<OnboardingView> {
     if (isOnboarded && mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const WebViewPage(url: "https://c681-102-89-33-110.ngrok-free.app/auth/students/login")),
+        MaterialPageRoute(builder: (context) => const WebViewPage(url: "https://60c2-102-88-108-224.ngrok-free.app/auth/students/login")),
       );
     }
   }
@@ -154,7 +154,7 @@ class _OnboardingViewState extends State<OnboardingView> {
             // same key
             if(!mounted)return;
             // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Home()));
-            const url = "https://c681-102-89-33-110.ngrok-free.app/auth/students/login";
+            const url = "https://60c2-102-88-108-224.ngrok-free.app/auth/students/login";
             Navigator.push(
               context,
               MaterialPageRoute(

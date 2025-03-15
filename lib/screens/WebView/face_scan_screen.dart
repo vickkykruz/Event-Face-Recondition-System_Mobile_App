@@ -61,8 +61,6 @@ class _FaceScanScreenState extends State<FaceScanScreen> {
 
     try {
       final XFile xFile = await _cameraController!.takePicture();
-      //Uint8List imageBytes = await File(imageFile.path).readAsBytes();
-      //String base64Image = base64Encode(imageBytes);
       final File imageFile = File(xFile.path); // Convert XFile to File
       
       debugPrint("✅ Face scan captured successfully!");
@@ -73,6 +71,34 @@ class _FaceScanScreenState extends State<FaceScanScreen> {
       }
     } catch (e) {
       debugPrint("❌ Capture error: $e");
+
+      if (mounted) {
+        setState(() {
+          _isCapturing = false;
+        });
+
+        // Show error and allow retry
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Scan Failed"),
+            content: Text("There was an error capturing your face. Please try again."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close dialog
+                  _captureFace(); // Retry scanning
+                },
+                child: Text("Retry"),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Cancel"),
+              ),
+            ],
+          ),
+        );
+      }
     } finally {
       if (mounted) {
         setState(() {
