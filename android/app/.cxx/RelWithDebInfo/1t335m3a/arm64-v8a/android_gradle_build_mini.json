@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/home/victor/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/usr/local/bin/ninja",
+      "-C",
+      "/home/victor/GitHub/Event-Face-Recondition-System_Mobile_App/android/app/.cxx/RelWithDebInfo/1t335m3a/arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/usr/local/bin/ninja",
+    "-C",
+    "/home/victor/GitHub/Event-Face-Recondition-System_Mobile_App/android/app/.cxx/RelWithDebInfo/1t335m3a/arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

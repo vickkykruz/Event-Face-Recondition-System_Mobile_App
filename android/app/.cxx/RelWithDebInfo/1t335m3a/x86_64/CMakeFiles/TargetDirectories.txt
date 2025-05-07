@@ -1,0 +1,2 @@
+/home/victor/GitHub/Event-Face-Recondition-System_Mobile_App/android/app/.cxx/RelWithDebInfo/1t335m3a/x86_64/CMakeFiles/edit_cache.dir
+/home/victor/GitHub/Event-Face-Recondition-System_Mobile_App/android/app/.cxx/RelWithDebInfo/1t335m3a/x86_64/CMakeFiles/rebuild_cache.dir

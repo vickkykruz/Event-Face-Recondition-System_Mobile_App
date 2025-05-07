@@ -1,0 +1,1 @@
+/home/victor/GitHub/Event-Face-Recondition-System_Mobile_App/build/app/intermediates/cxx/RelWithDebInfo/1t335m3a/obj/x86

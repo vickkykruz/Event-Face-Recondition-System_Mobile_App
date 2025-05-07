@@ -47,7 +47,7 @@ class _WebViewPageState extends State<WebViewPage> {
 
             // Regex to match both face scan and attendance scan routes
             final RegExp scanRegex = RegExp(
-                  r"https://60c2-102-88-108-224\.ngrok-free\.app/(auth/students/face-scan|students/attendance-scan)/([\w\d-]+)?");
+                  r"https://8ef3-2a00-23a8-c03-1a01-596d-5e0e-577c-c612\.ngrok-free\.app/(auth/students/face-scan|students/attendance-scan)/([\w\d-]+)?");
 
  
             final match = scanRegex.firstMatch(request.url);
@@ -254,9 +254,9 @@ class _WebViewPageState extends State<WebViewPage> {
     // Determine API URL based on scan type
     String apiUrl;
     if (scanType.contains("face-scan")) {
-      apiUrl = "https://60c2-102-88-108-224.ngrok-free.app/auth/students/process-face-scan";
+      apiUrl = "https://8ef3-2a00-23a8-c03-1a01-596d-5e0e-577c-c612.ngrok-free.app/auth/students/process-face-scan";
     } else if (scanType.contains("attendance-scan")) {
-      apiUrl = "https://60c2-102-88-108-224.ngrok-free.app/students/recognize-face";
+      apiUrl = "https://8ef3-2a00-23a8-c03-1a01-596d-5e0e-577c-c612.ngrok-free.app/students/recognize-face";
     } else {
       debugPrint("⚠️ Unknown scan type: $scanType");
       return false;
